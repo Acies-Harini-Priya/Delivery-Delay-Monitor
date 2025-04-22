@@ -1,0 +1,38 @@
+tables:
+  - name: delivery_events 
+    sql: {{ load_sql('delivery_events') }}
+    description: Table containing information about Delivery Events.
+    public: true
+
+    dimensions:
+      - name: shipment_id
+        type: string
+        column: shipment_id
+        description: "Unique id of shipment"
+      
+      - name: delivery_date_actual
+        type: string
+        column: order_id
+        description: "Actual date of delivery"
+
+      - name: status
+        type: string
+        column: status
+        description: "Status of the order"
+
+
+    measures:
+    - name: total_deliveries
+      sql: "COUNT(*)"
+      type: number
+      description: "Total number of delivery records"
+    
+    - name: successful_deliveries
+      sql: "COUNT(*) FILTER (WHERE {status} = 'delivered')"
+      type: number
+      description: "Number of successfully delivered shipments"
+
+    - name: in_transit_deliveries
+      sql: "COUNT(*) FILTER (WHERE {status} = 'in_transit')"
+      type: number
+      description: "Number of shipments currently in transit"

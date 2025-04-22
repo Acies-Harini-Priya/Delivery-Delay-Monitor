@@ -1,0 +1,34 @@
+tables:
+  - name: vendor_master
+    sql: {{ load_sql('vendor_master') }}
+    description: Table containing information about vendors.
+    public: true
+
+    dimensions:
+      - name: vendor_id
+        type: string
+        column: vendor_id
+        description: "Unique id of the vendor"
+      
+      - name: name
+        type: string
+        column: name
+        description: "Name of the vendor"
+
+      - name: avg_lead_time
+        type: number
+        column: avg_lead_time
+        description: "Avg lead time of each vendor"
+
+    measures:
+    - name: unique_vendors
+      sql: "COUNT(DISTINCT {vendor_id})"
+      type: number
+      description: "The total number of unique vendors"
+
+    - name: average_vendor_lead_time
+      sql: "ROUND(AVG(CAST({avg_lead_time} AS FLOAT)), 2)"
+      type: number
+      description: "Average delivery lead time across all vendors"
+
+

@@ -1,0 +1,67 @@
+tables:
+  - name: shipment_orders 
+    sql: {{ load_sql('shipment_orders') }}
+    description: Table containing information about Shipments.
+    public: true
+
+    joins:
+      - name: delivery_events
+        relationship: one_to_one
+        sql: "{TABLE.shipment_id} = {delivery_events.shipment_id}"
+
+      - name: vendor_master
+        relationship: many_to_one
+        sql: "{TABLE.vendor_id} = {vendor_master.vendor_id}"
+
+    dimensions:
+      - name: shipment_id
+        type: string
+        column: shipment_id
+        description: "Unique id of shipment"
+        primary_key: true
+      
+      - name: order_id
+        type: string
+        column: order_id
+        description: "Unique id of order"
+
+      - name: order_date
+        type: string
+        column: order_date
+        description: "Date of the order"
+
+      - name: delivery_date_expected
+        type: string
+        column: delivery_date_expected
+        description: "Expected Delivery Date"
+
+      - name: vendor_id 
+        type: string
+        column: vendor_id
+        description: "Unique id of the vendor"
+
+      - name: origin
+        type: string
+        column: origin
+        description: "Origin of the order"
+
+      - name: destination
+        type: string
+        column: destination
+        description: "Destination of the order"
+
+    measures:
+    - name: unique_shipment_id
+      sql: "COUNT(DISTINCT {shipment_id})"
+      type: number
+      description: "The total number of unique shipments"
+
+    - name: on_time_deliveries
+      sql: "COUNT(*) FILTER (WHERE CAST(delivery_events.delivery_date_actual AS DATE) <= CAST(delivery_date_expected AS DATE))"
+      type: number
+      description: "Number of on-time deliveries"
+
+    - name: average_delivery_delay_days
+      sql: "ROUND(AVG(DATE_PART('day', CAST(delivery_events.delivery_date_actual AS DATE) - CAST(delivery_date_expected AS DATE))) FILTER (WHERE delivery_events.delivery_date_actual > delivery_date_expected), 2)"
+      type: number
+      description: "Average number of days late for delayed shipments"
