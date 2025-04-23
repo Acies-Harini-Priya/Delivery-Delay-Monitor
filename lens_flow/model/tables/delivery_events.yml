@@ -9,6 +9,7 @@ tables:
         type: string
         column: shipment_id
         description: "Unique id of shipment"
+        primary_key: true
       
       - name: delivery_date_actual
         type: string

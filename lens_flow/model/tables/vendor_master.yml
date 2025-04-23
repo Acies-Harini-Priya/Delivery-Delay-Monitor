@@ -9,6 +9,7 @@ tables:
         type: string
         column: vendor_id
         description: "Unique id of the vendor"
+        primary_key: true
       
       - name: name
         type: string
