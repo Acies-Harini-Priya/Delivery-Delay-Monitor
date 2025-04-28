@@ -65,3 +65,15 @@ tables:
       sql: "ROUND(AVG(DATE_PART('day', CAST(delivery_events.delivery_date_actual AS DATE) - CAST(delivery_date_expected AS DATE))) FILTER (WHERE delivery_events.delivery_date_actual > delivery_date_expected), 2)"
       type: number
       description: "Average number of days late for delayed shipments"
+
+    # for views
+    - name: average_orders_per_vendor
+      sql: "ROUND(COUNT(DISTINCT {order_id})::decimal / COUNT(DISTINCT {vendor_id}), 2)"
+      type: number
+      description: "Average number of orders per vendor"
+
+    # for views
+    - name: average_expected_delivery_days
+      sql: "ROUND(AVG(DATE_PART('day', CAST(delivery_date_expected AS DATE) - CAST(order_date AS DATE))), 2)"
+      type: number
+      description: "Average number of days between order date and expected delivery date"
