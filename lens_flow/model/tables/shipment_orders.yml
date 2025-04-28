@@ -74,6 +74,6 @@ tables:
 
     # for views
     - name: average_expected_delivery_days
-      sql:  "ROUND(AVG(DATE_DIFF('day', CAST(order_date AS DATE), CAST(delivery_date_expected AS DATE))), 2)"
+      sql:  "ROUND(AVG(DATE_DIFF('day', DATE_PARSE(order_date, '%d-%m-%Y'), DATE_PARSE(delivery_date_expected, '%d-%m-%Y'))), 2)"
       type: number
       description: "Average number of days between order date and expected delivery date"
