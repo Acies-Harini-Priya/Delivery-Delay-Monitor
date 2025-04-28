@@ -68,12 +68,12 @@ tables:
 
     # for views
     - name: average_orders_per_vendor
-      sql: "ROUND(COUNT(DISTINCT {order_id})::decimal / COUNT(DISTINCT {vendor_id}), 2)"
+      sql:  "ROUND(CAST(COUNT(DISTINCT {order_id}) AS decimal) / COUNT(DISTINCT {vendor_id}), 2)"
       type: number
       description: "Average number of orders per vendor"
 
     # for views
     - name: average_expected_delivery_days
-      sql: "ROUND(AVG(DATE_PART('day', CAST(delivery_date_expected AS DATE) - CAST(order_date AS DATE))), 2)"
+      sql:  "ROUND(AVG(DATE_DIFF('day', CAST(order_date AS DATE), CAST(delivery_date_expected AS DATE))), 2)"
       type: number
       description: "Average number of days between order date and expected delivery date"
